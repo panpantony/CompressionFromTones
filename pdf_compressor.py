@@ -8,39 +8,66 @@ import threading
 import os
 import subprocess
 
-def compress_pdf(file_path, quality="screen"):
+def get_file_size(file_path):
+    """Returns file size in MB"""
+    return os.path.getsize(file_path) / (1024 * 1024)
+def compress_pdf(file_path, target_size_mb=2, max_attempts=3):
     """
-    Compress a PDF using Ghostscript.
-    Quality options: "screen", "ebook", "printer", "prepress".
+    Compress a PDF until it is under the target file size.
+    Uses different Ghostscript quality settings.
     """
-    try:
-        output_file = file_path.replace(".pdf", "_compressed.pdf")
+    quality_levels = ["prepress", "printer", "ebook", "screen"]  # Highest to lowest quality
+    attempt = 0
 
-        # Ghostscript command to compress the PDF
-        gs_command = [
-            "gs",
-            "-sDEVICE=pdfwrite",
-            "-dCompatibilityLevel=1.4",
-            f"-dPDFSETTINGS=/{quality}",
-            "-dNOPAUSE",
-            "-dQUIET",
-            "-dBATCH",
-            f"-sOutputFile={output_file}",
-            file_path
-        ]
+    while attempt < max_attempts:
+        current_size = get_file_size(file_path)
 
-        # Run the command
-        subprocess.run(gs_command, check=True)
+        if current_size <= target_size_mb:
+            print(f"✅ File is already under {target_size_mb}MB ({current_size:.2f}MB)")
+            return True
 
-        # Replace original file with the compressed version
-        os.replace(output_file, file_path)
+        if attempt >= len(quality_levels):  # Prevents exceeding available settings
+            print(f"❌ Could not compress below {target_size_mb}MB, best attempt: {current_size:.2f}MB")
+            return False
 
-        print(f"✅ Compressed PDF saved: {file_path}")
-        return True
-    except Exception as e:
-        print(f"❌ Error compressing {file_path}: {e}")
-        return False
+        quality = quality_levels[attempt]
+        output_file = file_path.replace(".pdf", f"_compressed_{quality}.pdf")
 
+        print(f"🔄 Attempt {attempt+1}: Compressing with quality '{quality}' (Current size: {current_size:.2f}MB)")
+
+        try:
+            gs_command = [
+                "gs",
+                "-sDEVICE=pdfwrite",
+                "-dCompatibilityLevel=1.4",
+                f"-dPDFSETTINGS=/{quality}",
+                "-dNOPAUSE",
+                "-dQUIET",
+                "-dBATCH",
+                f"-sOutputFile={output_file}",
+                file_path
+            ]
+
+            subprocess.run(gs_command, check=True)
+
+            new_size = get_file_size(output_file)
+
+            if new_size < current_size:  # Only replace if it actually reduced size
+                os.replace(output_file, file_path)
+                print(f"✅ Compressed to {new_size:.2f}MB using '{quality}' setting")
+
+            if new_size <= target_size_mb:
+                print(f"🎯 Successfully compressed below {target_size_mb}MB!")
+                return True
+
+        except Exception as e:
+            print(f"❌ Compression failed: {e}")
+            return False
+
+        attempt += 1
+
+    print(f"❌ Could not reach {target_size_mb}MB, final size: {get_file_size(file_path):.2f}MB")
+    return False
 # Function to select and compress a file manually
 def select_and_compress():
     file_path = filedialog.askopenfilename(filetypes=[("PDF Files", "*.pdf")])
@@ -52,7 +79,6 @@ def select_and_compress():
         messagebox.showinfo("Success", f"PDF compressed successfully:\n{file_path}")
     else:
         messagebox.showerror("Error", "Failed to compress PDF.")
-
 # Drag and Drop functionality
 def drop(event):
     file_path = event.data
@@ -99,7 +125,6 @@ def select_folder():
         watcher = Watcher(folder_path)
         thread = threading.Thread(target=watcher.run, daemon=True)
         thread.start()
-
 # Create GUI
 def create_gui():
     root = tk.Tk()
@@ -123,6 +148,5 @@ def create_gui():
         pass  # Drag & drop might not work on all systems
 
     root.mainloop()
-
 if __name__ == "__main__":
     create_gui()
