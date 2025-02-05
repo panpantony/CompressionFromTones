@@ -1,0 +1,4 @@
+([('pdf_compressor',
+   '/Users/tony/Docs/Projects/PyCharm/CompressionFromTones/App Bundle '
+   '(OSX-WIN64)/dist/pdf_compressor',
+   'EXECUTABLE')],)
