@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab3e1780-49b1-4825-ba1d-da50f7140341" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/CompressionFromTones.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="ab3e1780-49b1-4825-ba1d-da50f7140341" name="Changes" comment="first working version" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,11 +68,32 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1738723284469</updated>
-      <workItem from="1738723289904" duration="3524000" />
+      <workItem from="1738723289904" duration="4192000" />
     </task>
+    <task id="LOCAL-00001" summary="first working version">
+      <option name="closed" value="true" />
+      <created>1738727037051</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1738727037052</updated>
+    </task>
+    <task id="LOCAL-00002" summary="first working version">
+      <option name="closed" value="true" />
+      <created>1738727207075</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1738727207075</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first working version" />
+    <option name="LAST_COMMIT_MESSAGE" value="first working version" />
   </component>
 </project>
