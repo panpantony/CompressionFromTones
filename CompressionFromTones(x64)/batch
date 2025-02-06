@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed --noconsole --hidden-import=customtkinter --hidden-import=pystray --hidden-import=pystray._win32 --hidden-import=PIL --hidden-import=rumps --add-binary "gs10.04.0/bin/gswin64c.exe;." --icon=icon.ico pdf_compressor.py
