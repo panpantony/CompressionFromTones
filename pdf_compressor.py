@@ -3,8 +3,6 @@ import sys
 import subprocess
 import threading
 import json
-import time
-import platform
 import customtkinter as ctk
 from tkinter import filedialog, messagebox, scrolledtext
 
@@ -228,7 +226,6 @@ def select_and_compress():
     file_path = filedialog.askopenfilename(filetypes=[("PDF Files", "*.pdf")])
     if file_path:
         compress_pdf(file_path)
-
 
 def select_folder():
     """Allows user to set a default folder for automatic compression."""

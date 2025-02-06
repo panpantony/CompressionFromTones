@@ -248,13 +248,17 @@ def compress_pdf(file_path, quality=None):
             file_path
         ]
         if sys.platform.startswith("win"):
-            creationflags = subprocess.CREATE_NO_WINDOW
+            # Combine flags: CREATE_NO_WINDOW and DETACHED_PROCESS
+            creationflags = subprocess.CREATE_NO_WINDOW | 0x00000008
             startupinfo = subprocess.STARTUPINFO()
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = 0  # SW_HIDE
         else:
             creationflags = 0
             startupinfo = None
-        result = subprocess.run(gs_command, check=True, creationflags=creationflags, startupinfo=startupinfo,
+        result = subprocess.run(gs_command, check=True,
+                                  creationflags=creationflags,
+                                  startupinfo=startupinfo,
                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         if result.stdout:
             log_message("Ghostscript stdout: " + result.stdout)
@@ -387,11 +391,17 @@ except Exception as e:
 
 choose_pdf = ctk.CTkButton(root, text="Choose PDF", command=select_and_compress)
 choose_pdf.pack(pady=10)
+
+choose_pdf_description = ctk.CTkLabel(root,
+    text=("[No Data will show if PDF is Compressed]"),
+    text_color="gray", font=("Arial", 12))
+choose_pdf_description.pack(pady=(0, 0))
+
 autocompress_folder = ctk.CTkButton(root, text="Set Auto-Compress Folder", command=select_folder)
 autocompress_folder.pack(pady=10)
 quality_var = ctk.StringVar(value=default_quality)
 quality_label = ctk.CTkLabel(root, text="Select PDF Quality:")
-quality_label.pack(pady=(10, 0))
+quality_label.pack(pady=(5, 0))
 quality_options = ["Low Quality", "Balanced Quality", "High Quality", "Very High Quality"]
 quality_menu = ctk.CTkOptionMenu(root, variable=quality_var, values=quality_options, command=update_quality)
 quality_menu.pack(pady=(0, 0))
@@ -401,15 +411,15 @@ quality_description = ctk.CTkLabel(root,
           "• High Quality: Low Compression\n"
           "• Very High Quality: Very Low Compression"),
     text_color="gray", font=("Arial", 12))
-quality_description.pack(pady=(0, 10))
+quality_description.pack(pady=(0, 5))
 auto_monitoring_switch = ctk.CTkSwitch(root, text="Enable Auto-Compression", command=toggle_auto_monitoring)
-auto_monitoring_switch.pack(pady=10)
+auto_monitoring_switch.pack(pady=5)
 if auto_monitoring:
     auto_monitoring_switch.select()
 else:
     auto_monitoring_switch.deselect()
 minimize_switch = ctk.CTkSwitch(root, text="Start on Startup & Minimize Automatically", command=toggle_minimize_on_startup)
-minimize_switch.pack(pady=10)
+minimize_switch.pack(pady=5)
 if minimize_on_startup:
     minimize_switch.select()
 else:
