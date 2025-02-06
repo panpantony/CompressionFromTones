@@ -374,7 +374,7 @@ else:
     auto_monitoring_switch.deselect()
 
 # 5. Minimize on Startup Switch
-minimize_switch = ctk.CTkSwitch(root, text="Start on Startup & Minimize Automatically",
+minimize_switch = ctk.CTkSwitch(root, text_color="gray", text="Start on Startup & Minimize Automatically",
                                 command=toggle_minimize_on_startup)
 minimize_switch.pack(pady=10)
 if minimize_on_startup:
